@@ -250,6 +250,7 @@ func MustPostFormString(c *gin.Context, key string) string {
 }
 
 // BindHeader needs tag "header" in fields of v.
+// The value of tag "header" is automatically converted to the canonical format.
 func BindHeader(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, Header)
 }

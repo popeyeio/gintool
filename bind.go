@@ -3,6 +3,7 @@ package gintool
 import (
 	"errors"
 	"net/http"
+	"net/textproto"
 	"reflect"
 	"strconv"
 	"time"
@@ -28,10 +29,10 @@ func (headerBinding) Name() string {
 }
 
 func (headerBinding) Bind(req *http.Request, obj interface{}) error {
-	return bind(obj, req.Header, tagKeyHeader)
+	return bind(obj, req.Header, tagKeyHeader, true)
 }
 
-func bind(ptr interface{}, values map[string][]string, tagKey string) error {
+func bind(ptr interface{}, values map[string][]string, tagKey string, canonical bool) error {
 	rt := reflect.TypeOf(ptr).Elem()
 	rv := reflect.ValueOf(ptr).Elem()
 	for i := 0; i < rt.NumField(); i++ {
@@ -50,14 +51,14 @@ func bind(ptr interface{}, values map[string][]string, tagKey string) error {
 			tag = rtf.Name
 
 			if kind == reflect.Struct {
-				if err := bind(rvf.Addr().Interface(), values, tagKey); err != nil {
+				if err := bind(rvf.Addr().Interface(), values, tagKey, canonical); err != nil {
 					return err
 				}
 				continue
 			}
 		}
 
-		val, exists := values[tag]
+		val, exists := values[canonicalKey(tag, canonical)]
 		if !exists {
 			continue
 		}
@@ -65,9 +66,9 @@ func bind(ptr interface{}, values map[string][]string, tagKey string) error {
 		numElems := len(val)
 		if kind == reflect.Slice && numElems > 0 {
 			elemKind := rvf.Type().Elem().Kind()
-			slice := reflect.MakeSlice(rv.Type(), numElems, numElems)
+			slice := reflect.MakeSlice(rvf.Type(), numElems, numElems)
 			for j := 0; j < numElems; j++ {
-				if err := setField(elemKind, val[i], slice.Index(i)); err != nil {
+				if err := setField(elemKind, val[j], slice.Index(j)); err != nil {
 					return err
 				}
 			}
@@ -117,6 +118,7 @@ func setField(kind reflect.Kind, val string, field reflect.Value) error {
 		return setFloatField(val, 64, field)
 	case reflect.String:
 		field.SetString(val)
+		return nil
 	}
 	return errors.New("unknown type")
 }
@@ -192,4 +194,11 @@ func setTimeField(val string, structField reflect.StructField, field reflect.Val
 
 	field.Set(reflect.ValueOf(t))
 	return nil
+}
+
+func canonicalKey(key string, canonical bool) string {
+	if canonical {
+		key = textproto.CanonicalMIMEHeaderKey(key)
+	}
+	return key
 }
