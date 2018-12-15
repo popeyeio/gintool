@@ -48,38 +48,38 @@ func (e *EmptyError) Error() string {
 	return fmt.Sprintf("%s(%s) is empty", e.key, e.kind)
 }
 
-type GSError struct {
+type GintoolError struct {
 	code int
 	err  error
 }
 
-var _ error = (*GSError)(nil)
+var _ error = (*GintoolError)(nil)
 
-func (e *GSError) GetCode() int {
+func (e *GintoolError) GetCode() int {
 	return e.code
 }
 
-func (e *GSError) GetError() error {
+func (e *GintoolError) GetError() error {
 	return e.err
 }
 
-func (e *GSError) Error() string {
+func (e *GintoolError) Error() string {
 	return fmt.Sprintf("%s - %+v", CodeMsg(e.code), e.err)
 }
 
-func (e *GSError) reset() {
+func (e *GintoolError) reset() {
 	e.code = 0
 	e.err = nil
 }
 
-var gsErrorPool sync.Pool
+var gintoolErrorPool sync.Pool
 
-func AcquireGSError(code int, err error) (e *GSError) {
-	v := gsErrorPool.Get()
+func AcquireGintoolError(code int, err error) (e *GintoolError) {
+	v := gintoolErrorPool.Get()
 	if v == nil {
-		e = &GSError{}
+		e = &GintoolError{}
 	} else {
-		e = v.(*GSError)
+		e = v.(*GintoolError)
 	}
 
 	e.code = code
@@ -87,9 +87,9 @@ func AcquireGSError(code int, err error) (e *GSError) {
 	return
 }
 
-func ReleaseGSError(e *GSError) {
+func ReleaseGintoolError(e *GintoolError) {
 	if e != nil {
 		e.reset()
-		gsErrorPool.Put(e)
+		gintoolErrorPool.Put(e)
 	}
 }

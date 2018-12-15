@@ -58,9 +58,9 @@ func (e *Engine) GinHandler(handlers ...HandlerFunc) gin.HandlerFunc {
 
 		defer func() {
 			if r := recover(); r != nil {
-				if err, ok := r.(*GSError); ok {
+				if err, ok := r.(*GintoolError); ok {
 					gc.Abort(err.GetCode(), err.GetError())
-					ReleaseGSError(err)
+					ReleaseGintoolError(err)
 					e.aborter(c, gc)
 				} else {
 					panic(r)

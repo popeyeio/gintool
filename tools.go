@@ -357,7 +357,7 @@ func MustDo(f func() (interface{}, error), codes ...int) interface{} {
 
 	result, err := f()
 	if err != nil {
-		panic(AcquireGSError(code, err))
+		panic(AcquireGintoolError(code, err))
 	}
 	return result
 }
