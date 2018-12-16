@@ -47,8 +47,8 @@ func NewEngine(opts ...Option) *Engine {
 	return e
 }
 
-func (e *Engine) Use(middleware ...HandlerFunc) {
-	e.middlewares = append(e.middlewares, middleware...)
+func (e *Engine) Use(middlewares ...HandlerFunc) {
+	e.middlewares = append(e.middlewares, middlewares...)
 }
 
 func (e *Engine) GinHandler(handlers ...HandlerFunc) gin.HandlerFunc {

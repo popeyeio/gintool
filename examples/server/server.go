@@ -72,7 +72,7 @@ func CheckUser(c *gin.Context, gc *gintool.Context) {
 }
 
 type Record struct {
-	AccountID int64   `header:"X-AccountID" form:"-" valid:"required"`
+	AccountID int64   `header:"X-Accountid" form:"-" valid:"required"`
 	Action    string  `header:"-" form:"Action" valid:"required"`
 	Amount    float32 `header:"-" form:"Amount" valid:"required"`
 }
