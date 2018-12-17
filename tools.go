@@ -265,6 +265,10 @@ func MustBindHeader(c *gin.Context, v interface{}) {
 	}, CodeBindErr)
 }
 
+func JSONUseNumber(enabled bool) {
+	binding.EnableDecoderUseNumber = enabled
+}
+
 func JSONBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.JSON)
 }
