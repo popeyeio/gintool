@@ -1,7 +1,7 @@
 package gintool
 
 import (
-	"io"
+	"bytes"
 	"net/url"
 	"reflect"
 	"strconv"
@@ -355,7 +355,7 @@ func MustEncodeValues(v interface{}) url.Values {
 
 // EncodeJSON needs tag "json" in fields of v.
 // Note: ReleaseBuffer needs to be called after EncodeJSON.
-func EncodeJSON(v interface{}) (io.Reader, error) {
+func EncodeJSON(v interface{}) (*bytes.Buffer, error) {
 	buffer := AcquireBuffer()
 	if err := json.NewEncoder(buffer).Encode(v); err != nil {
 		ReleaseBuffer(buffer)
@@ -366,11 +366,11 @@ func EncodeJSON(v interface{}) (io.Reader, error) {
 
 // MustEncodeJSON needs tag "json" in fields of v.
 // Note: ReleaseBuffer needs to be called after MustEncodeJSON.
-func MustEncodeJSON(v interface{}) io.Reader {
+func MustEncodeJSON(v interface{}) *bytes.Buffer {
 	result := MustDo(func() (interface{}, error) {
 		return EncodeJSON(v)
 	}, CodeEncodeErr)
-	return result.(io.Reader)
+	return result.(*bytes.Buffer)
 }
 
 func MustDo(f func() (interface{}, error), codes ...int) interface{} {
