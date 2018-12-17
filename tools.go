@@ -1,12 +1,16 @@
 package gintool
 
 import (
+	"io"
 	"net/url"
+	"reflect"
 	"strconv"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/google/go-querystring/query"
+	"github.com/popeyeio/gintool/json"
 )
 
 func HeaderBool(c *gin.Context, key string) (bool, error) {
@@ -349,6 +353,26 @@ func MustEncodeValues(v interface{}) url.Values {
 	return result.(url.Values)
 }
 
+// EncodeJSON needs tag "json" in fields of v.
+// Note: ReleaseBuffer needs to be called after EncodeJSON.
+func EncodeJSON(v interface{}) (io.Reader, error) {
+	buffer := AcquireBuffer()
+	if err := json.NewEncoder(buffer).Encode(v); err != nil {
+		ReleaseBuffer(buffer)
+		return nil, err
+	}
+	return buffer, nil
+}
+
+// MustEncodeJSON needs tag "json" in fields of v.
+// Note: ReleaseBuffer needs to be called after MustEncodeJSON.
+func MustEncodeJSON(v interface{}) io.Reader {
+	result := MustDo(func() (interface{}, error) {
+		return EncodeJSON(v)
+	}, CodeEncodeErr)
+	return result.(io.Reader)
+}
+
 func MustDo(f func() (interface{}, error), codes ...int) interface{} {
 	code := CodeDownstreamErr
 	if len(codes) > 0 {
@@ -360,4 +384,18 @@ func MustDo(f func() (interface{}, error), codes ...int) interface{} {
 		panic(AcquireGintoolError(code, err))
 	}
 	return result
+}
+
+func Bytes2Str(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
+
+func Str2Bytes(s string) []byte {
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	bh := reflect.SliceHeader{
+		Data: sh.Data,
+		Len:  sh.Len,
+		Cap:  sh.Len,
+	}
+	return *(*[]byte)(unsafe.Pointer(&bh))
 }
