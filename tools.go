@@ -358,7 +358,7 @@ func MustEncodeValues(v interface{}) url.Values {
 }
 
 // EncodeJSON needs tag "json" in fields of v.
-// Note: ReleaseBuffer needs to be called after EncodeJSON.
+// Note: ReleaseBuffer needs to be called after EncodeJSON is called successfully.
 func EncodeJSON(v interface{}) (*bytes.Buffer, error) {
 	buffer := AcquireBuffer()
 	if err := json.NewEncoder(buffer).Encode(v); err != nil {
