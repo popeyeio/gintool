@@ -32,36 +32,11 @@ func NewGintoolEngine() *gintool.Engine {
 }
 
 func FinishWithCodeData(c *gin.Context, code int, data interface{}) {
-	c.JSON(gintool.HTTPStatus(code), RespOK(code, data))
+	c.JSON(gintool.HTTPStatus(code), gintool.RespOK(code, data))
 }
 
 func AbortWithCodeErr(c *gin.Context, code int, err error) {
-	c.AbortWithStatusJSON(gintool.HTTPStatus(code), RespError(code, err))
-}
-
-type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
-}
-
-func RespOK(code int, data interface{}) *Response {
-	return &Response{
-		Code:    code,
-		Message: gintool.CodeMsg(code),
-		Data:    data,
-	}
-}
-
-func RespError(code int, err error) *Response {
-	resp := &Response{
-		Code:    code,
-		Message: gintool.CodeMsg(code),
-	}
-	if err != nil {
-		resp.Message += " - " + err.Error()
-	}
-	return resp
+	c.AbortWithStatusJSON(gintool.HTTPStatus(code), gintool.RespError(code, err))
 }
 
 func CheckUser(c *gin.Context, gc *gintool.Context) {
