@@ -36,8 +36,8 @@ func WithAborter(aborter HandlerFunc) Option {
 
 func NewEngine(opts ...Option) *Engine {
 	e := &Engine{
-		finisher: func(*gin.Context, *Context) {},
-		aborter:  func(*gin.Context, *Context) {},
+		finisher: GetCommonFinisher(),
+		aborter:  GetCommonAborter(),
 	}
 
 	for _, opt := range opts {
@@ -47,8 +47,9 @@ func NewEngine(opts ...Option) *Engine {
 	return e
 }
 
-func (e *Engine) Use(middlewares ...HandlerFunc) {
+func (e *Engine) Use(middlewares ...HandlerFunc) *Engine {
 	e.middlewares = append(e.middlewares, middlewares...)
+	return e
 }
 
 func (e *Engine) GinHandler(handlers ...HandlerFunc) gin.HandlerFunc {

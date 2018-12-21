@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	e := NewGintoolEngine()
+	e := gintool.NewEngine()
 	e.Use(CheckUser)
 
 	r := gin.New()
@@ -17,26 +17,6 @@ func main() {
 	r.POST("/records", e.GinHandler(CreateRecord))
 
 	r.Run(":1990")
-}
-
-func NewGintoolEngine() *gintool.Engine {
-	opts := []gintool.Option{
-		gintool.WithFinisher(func(c *gin.Context, gc *gintool.Context) {
-			FinishWithCodeData(c, gc.GetCode(), gc.GetData())
-		}),
-		gintool.WithAborter(func(c *gin.Context, gc *gintool.Context) {
-			AbortWithCodeErr(c, gc.GetCode(), gc.GetError())
-		}),
-	}
-	return gintool.NewEngine(opts...)
-}
-
-func FinishWithCodeData(c *gin.Context, code int, data interface{}) {
-	c.JSON(gintool.HTTPStatus(code), gintool.RespOK(code, data))
-}
-
-func AbortWithCodeErr(c *gin.Context, code int, err error) {
-	c.AbortWithStatusJSON(gintool.HTTPStatus(code), gintool.RespError(code, err))
 }
 
 func CheckUser(c *gin.Context, gc *gintool.Context) {
