@@ -10,6 +10,15 @@ const (
 	CodeCreated        = 2001
 	CodePartialContent = 2006
 
+	CodeMultipleChoices   = 3000
+	CodeMovedPermanently  = 3001
+	CodeFound             = 3002
+	CodeSeeOther          = 3003
+	CodeNotModified       = 3004
+	CodeUseProxy          = 3005
+	CodeTemporaryRedirect = 3007
+	CodePermanentRedirect = 3008
+
 	CodeBadRequest      = 4000
 	CodeUnauthorized    = 4001
 	CodeForbidden       = 4003
@@ -36,6 +45,15 @@ var codeMsg = map[int]string{
 	CodeOK:             "success",
 	CodeCreated:        "created",
 	CodePartialContent: "partial content",
+
+	CodeMultipleChoices:   "multiple choices",
+	CodeMovedPermanently:  "moved permanently",
+	CodeFound:             "found",
+	CodeSeeOther:          "see other",
+	CodeNotModified:       "not modified",
+	CodeUseProxy:          "use proxy",
+	CodeTemporaryRedirect: "temporary redirect",
+	CodePermanentRedirect: "permanent redirect",
 
 	CodeBadRequest:      "bad request",
 	CodeUnauthorized:    "unauthorized",
@@ -71,6 +89,15 @@ var httpStatus = map[int]int{
 	CodeCreated:        http.StatusCreated,
 	CodePartialContent: http.StatusPartialContent,
 
+	CodeMultipleChoices:   http.StatusMultipleChoices,
+	CodeMovedPermanently:  http.StatusMovedPermanently,
+	CodeFound:             http.StatusFound,
+	CodeSeeOther:          http.StatusSeeOther,
+	CodeNotModified:       http.StatusNotModified,
+	CodeUseProxy:          http.StatusUseProxy,
+	CodeTemporaryRedirect: http.StatusTemporaryRedirect,
+	CodePermanentRedirect: http.StatusPermanentRedirect,
+
 	CodeBadRequest:      http.StatusBadRequest,
 	CodeUnauthorized:    http.StatusUnauthorized,
 	CodeForbidden:       http.StatusForbidden,
@@ -93,7 +120,7 @@ var httpStatus = map[int]int{
 }
 
 const (
-	UnknownStatus = 100
+	UnknownStatus = 900
 )
 
 func HTTPStatus(code int) int {
