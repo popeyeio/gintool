@@ -44,7 +44,7 @@ func MustHeaderInt64(c *gin.Context, key string) int64 {
 	return result.(int64)
 }
 
-func HeaderUInt64(c *gin.Context, key string) (uint64, error) {
+func HeaderUint64(c *gin.Context, key string) (uint64, error) {
 	if v := c.GetHeader(key); v == "" {
 		return 0, NewHeaderEmptyError(key)
 	} else {
@@ -54,7 +54,7 @@ func HeaderUInt64(c *gin.Context, key string) (uint64, error) {
 
 func MustHeaderUInt64(c *gin.Context, key string) uint64 {
 	result := MustDo(func() (interface{}, error) {
-		return HeaderUInt64(c, key)
+		return HeaderUint64(c, key)
 	}, CodeBadRequest)
 	return result.(uint64)
 }
@@ -104,7 +104,7 @@ func MustParamInt64(c *gin.Context, key string) int64 {
 	return result.(int64)
 }
 
-func ParamUInt64(c *gin.Context, key string) (uint64, error) {
+func ParamUint64(c *gin.Context, key string) (uint64, error) {
 	if v := c.Param(key); v == "" {
 		return 0, NewParamEmptyError(key)
 	} else {
@@ -114,7 +114,7 @@ func ParamUInt64(c *gin.Context, key string) (uint64, error) {
 
 func MustParamUInt64(c *gin.Context, key string) uint64 {
 	result := MustDo(func() (interface{}, error) {
-		return ParamUInt64(c, key)
+		return ParamUint64(c, key)
 	}, CodeBadRequest)
 	return result.(uint64)
 }
@@ -164,7 +164,7 @@ func MustQueryInt64(c *gin.Context, key string) int64 {
 	return result.(int64)
 }
 
-func QueryUInt64(c *gin.Context, key string) (uint64, error) {
+func QueryUint64(c *gin.Context, key string) (uint64, error) {
 	if v := c.Query(key); v == "" {
 		return 0, NewQueryEmptyError(key)
 	} else {
@@ -174,7 +174,7 @@ func QueryUInt64(c *gin.Context, key string) (uint64, error) {
 
 func MustQueryUInt64(c *gin.Context, key string) uint64 {
 	result := MustDo(func() (interface{}, error) {
-		return QueryUInt64(c, key)
+		return QueryUint64(c, key)
 	}, CodeBadRequest)
 	return result.(uint64)
 }
@@ -224,7 +224,7 @@ func MustPostFormInt64(c *gin.Context, key string) int64 {
 	return result.(int64)
 }
 
-func PostFormUInt64(c *gin.Context, key string) (uint64, error) {
+func PostFormUint64(c *gin.Context, key string) (uint64, error) {
 	if v := c.PostForm(key); v == "" {
 		return 0, NewPostFormEmptyError(key)
 	} else {
@@ -234,7 +234,7 @@ func PostFormUInt64(c *gin.Context, key string) (uint64, error) {
 
 func MustPostFormUInt64(c *gin.Context, key string) uint64 {
 	result := MustDo(func() (interface{}, error) {
-		return PostFormUInt64(c, key)
+		return PostFormUint64(c, key)
 	}, CodeBadRequest)
 	return result.(uint64)
 }
