@@ -34,9 +34,7 @@ type Record struct {
 
 func CreateRecord(c *gin.Context, gc *gintool.Context) {
 	record := &Record{}
-	gintool.MustBindHeader(c, record)
-	gintool.MustFormBindBody(c, record)
-	gintool.MustValidate(record)
+	gintool.MustBind(c, record, gintool.BHeader|gintool.BFormBody|gintool.BValidator)
 
 	fmt.Println("deal with record")
 

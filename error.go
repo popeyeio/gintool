@@ -93,3 +93,8 @@ func ReleaseGintoolError(e *GintoolError) {
 		gintoolErrorPool.Put(e)
 	}
 }
+
+func IsGintoolError(err error) bool {
+	_, ok := err.(*GintoolError)
+	return ok
+}

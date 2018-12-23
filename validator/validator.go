@@ -1,4 +1,4 @@
-package gintool
+package validator
 
 import (
 	"reflect"
@@ -8,9 +8,9 @@ import (
 	"gopkg.in/go-playground/validator.v8"
 )
 
-const (
-	tagKeyValidator = "valid"
-)
+const tagKeyValidator = "valid"
+
+var GintoolValidator = &gintoolValidator{}
 
 type gintoolValidator struct {
 	once     sync.Once
@@ -48,22 +48,4 @@ func kindOfData(data interface{}) reflect.Kind {
 		kind = rv.Elem().Kind()
 	}
 	return kind
-}
-
-func CloseGinValidator() {
-	binding.Validator = nil
-}
-
-var (
-	GintoolValidator = &gintoolValidator{}
-)
-
-func Validate(v interface{}) error {
-	return GintoolValidator.ValidateStruct(v)
-}
-
-func MustValidate(v interface{}) {
-	MustDo(func() (interface{}, error) {
-		return nil, Validate(v)
-	}, CodeValidateErr)
 }

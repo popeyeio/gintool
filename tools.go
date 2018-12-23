@@ -12,6 +12,7 @@ import (
 	"github.com/google/go-querystring/query"
 	"github.com/popeyeio/gintool/binder"
 	"github.com/popeyeio/gintool/json"
+	"github.com/popeyeio/gintool/validator"
 )
 
 func HeaderBool(c *gin.Context, key string) (bool, error) {
@@ -254,6 +255,21 @@ func MustPostFormString(c *gin.Context, key string) string {
 	return result.(string)
 }
 
+func CloseGinValidator() {
+	binding.Validator = nil
+}
+
+// BindValidator needs tag "valid" in fields of v.
+func Validate(v interface{}) error {
+	return validator.GintoolValidator.ValidateStruct(v)
+}
+
+func MustValidate(v interface{}) {
+	MustDo(func() (interface{}, error) {
+		return nil, Validate(v)
+	}, CodeValidateErr)
+}
+
 // BindHeader needs tag "header" in fields of v.
 // The value of tag "header" is automatically converted to the canonical format.
 func BindHeader(c *gin.Context, v interface{}) error {
@@ -380,8 +396,6 @@ func EncodeJSON(v interface{}) (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-// MustEncodeJSON needs tag "json" in fields of v.
-// Note: ReleaseBuffer needs to be called after MustEncodeJSON.
 func MustEncodeJSON(v interface{}) *bytes.Buffer {
 	result := MustDo(func() (interface{}, error) {
 		return EncodeJSON(v)
@@ -396,10 +410,13 @@ func MustDo(f func() (interface{}, error), codes ...int) interface{} {
 	}
 
 	result, err := f()
-	if err != nil {
-		panic(AcquireGintoolError(code, err))
+	if err == nil {
+		return result
 	}
-	return result
+	if IsGintoolError(err) {
+		panic(err)
+	}
+	panic(AcquireGintoolError(code, err))
 }
 
 func Bytes2Str(b []byte) string {
@@ -419,4 +436,79 @@ func Str2Bytes(s string) []byte {
 		Cap:  sh.Len,
 	}
 	return *(*[]byte)(unsafe.Pointer(bh))
+}
+
+const (
+	BValidator = 1 << iota
+	BHeader
+	BParam
+	BJSONBody
+	BXMLBody
+	BFormQuery
+	BFormBody
+	BFormQueryBody
+	BPBBody
+	BMsgpackBody
+)
+
+func Bind(c *gin.Context, v interface{}, flag int) (err error) {
+	if flag&BHeader != 0 {
+		if err = BindHeader(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BParam != 0 {
+		if err = BindParam(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BJSONBody != 0 {
+		if err = JSONBindBody(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BXMLBody != 0 {
+		if err = XMLBindBody(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BFormQuery != 0 {
+		if err = FormBindQuery(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BFormBody != 0 {
+		if err = FormBindBody(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BFormQueryBody != 0 {
+		if err = FormBindQueryBody(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BPBBody != 0 {
+		if err = PBBindBody(c, v); err != nil {
+			return
+		}
+	}
+	if flag&BMsgpackBody != 0 {
+		if err = MsgpackBindBody(c, v); err != nil {
+			return
+		}
+	}
+
+	// this must be the last one.
+	if flag&BValidator != 0 {
+		if err = Validate(v); err != nil {
+			return AcquireGintoolError(CodeValidateErr, err)
+		}
+	}
+	return
+}
+
+func MustBind(c *gin.Context, v interface{}, flag int) {
+	MustDo(func() (interface{}, error) {
+		return nil, Bind(c, v, flag)
+	}, CodeBindErr)
 }
