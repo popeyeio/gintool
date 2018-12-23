@@ -8,7 +8,7 @@ import (
 
 const tagKeyParam = "param"
 
-var ParamBinder = paramBinder{}
+var ParamBinder = &paramBinder{}
 
 type paramBinder struct {
 }

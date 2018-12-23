@@ -396,6 +396,8 @@ func EncodeJSON(v interface{}) (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
+// MustEncodeJSON needs tag "json" in fields of v.
+// Note: ReleaseBuffer needs to be called after MustEncodeJSON is called successfully.
 func MustEncodeJSON(v interface{}) *bytes.Buffer {
 	result := MustDo(func() (interface{}, error) {
 		return EncodeJSON(v)
@@ -451,50 +453,24 @@ const (
 	BMsgpackBody
 )
 
+var funcs = map[int]func(*gin.Context, interface{}) error{
+	BHeader:        BindHeader,
+	BParam:         BindParam,
+	BJSONBody:      JSONBindBody,
+	BXMLBody:       XMLBindBody,
+	BFormQuery:     FormBindQuery,
+	BFormBody:      FormBindBody,
+	BFormQueryBody: FormBindQueryBody,
+	BPBBody:        PBBindBody,
+	BMsgpackBody:   MsgpackBindBody,
+}
+
 func Bind(c *gin.Context, v interface{}, flag int) (err error) {
-	if flag&BHeader != 0 {
-		if err = BindHeader(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BParam != 0 {
-		if err = BindParam(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BJSONBody != 0 {
-		if err = JSONBindBody(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BXMLBody != 0 {
-		if err = XMLBindBody(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BFormQuery != 0 {
-		if err = FormBindQuery(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BFormBody != 0 {
-		if err = FormBindBody(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BFormQueryBody != 0 {
-		if err = FormBindQueryBody(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BPBBody != 0 {
-		if err = PBBindBody(c, v); err != nil {
-			return
-		}
-	}
-	if flag&BMsgpackBody != 0 {
-		if err = MsgpackBindBody(c, v); err != nil {
-			return
+	for k, f := range funcs {
+		if flag&k != 0 {
+			if err = f(c, v); err != nil {
+				return
+			}
 		}
 	}
 
