@@ -1,35 +1,18 @@
-package gintool
+package binder
 
 import (
 	"errors"
-	"net/http"
 	"net/textproto"
 	"reflect"
 	"strconv"
 	"time"
 
-	"github.com/gin-gonic/gin/binding"
+	"github.com/gin-gonic/gin"
 )
 
-const (
-	tagKeyHeader = "header"
-)
-
-var (
-	Header = headerBinding{}
-)
-
-type headerBinding struct {
-}
-
-var _ binding.Binding = (*headerBinding)(nil)
-
-func (headerBinding) Name() string {
-	return "header"
-}
-
-func (headerBinding) Bind(req *http.Request, obj interface{}) error {
-	return bind(obj, req.Header, tagKeyHeader, true)
+type Binder interface {
+	Name() string
+	Bind(*gin.Context, interface{}) error
 }
 
 func bind(ptr interface{}, values map[string][]string, tagKey string, canonical bool) error {

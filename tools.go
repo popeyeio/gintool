@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/google/go-querystring/query"
+	"github.com/popeyeio/gintool/binder"
 	"github.com/popeyeio/gintool/json"
 )
 
@@ -256,12 +257,23 @@ func MustPostFormString(c *gin.Context, key string) string {
 // BindHeader needs tag "header" in fields of v.
 // The value of tag "header" is automatically converted to the canonical format.
 func BindHeader(c *gin.Context, v interface{}) error {
-	return c.ShouldBindWith(v, Header)
+	return binder.HeaderBinder.Bind(c, v)
 }
 
 func MustBindHeader(c *gin.Context, v interface{}) {
 	MustDo(func() (interface{}, error) {
 		return nil, BindHeader(c, v)
+	}, CodeBindErr)
+}
+
+// BindParam needs tag "param" in fields of v.
+func BindParam(c *gin.Context, v interface{}) error {
+	return binder.ParamBinder.Bind(c, v)
+}
+
+func MustBindParam(c *gin.Context, v interface{}) {
+	MustDo(func() (interface{}, error) {
+		return nil, BindParam(c, v)
 	}, CodeBindErr)
 }
 
