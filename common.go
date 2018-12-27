@@ -5,23 +5,26 @@ import (
 )
 
 type CommonResponse struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
+	RequestID string      `json:"request_id,omitempty"`
+	Code      int         `json:"code"`
+	Message   string      `json:"message"`
+	Data      interface{} `json:"data,omitempty"`
 }
 
-func RespOK(code int, data interface{}) *CommonResponse {
+func RespOK(id string, code int, data interface{}) *CommonResponse {
 	return &CommonResponse{
-		Code:    code,
-		Message: CodeMsg(code),
-		Data:    data,
+		RequestID: id,
+		Code:      code,
+		Message:   CodeMsg(code),
+		Data:      data,
 	}
 }
 
-func RespError(code int, err error) *CommonResponse {
+func RespError(id string, code int, err error) *CommonResponse {
 	resp := &CommonResponse{
-		Code:    code,
-		Message: CodeMsg(code),
+		RequestID: id,
+		Code:      code,
+		Message:   CodeMsg(code),
 	}
 	if err != nil {
 		resp.Message += " - " + err.Error()
@@ -30,11 +33,11 @@ func RespError(code int, err error) *CommonResponse {
 }
 
 func FinishWithCodeData(c *gin.Context, code int, data interface{}) {
-	c.JSON(HTTPStatus(code), RespOK(code, data))
+	c.JSON(HTTPStatus(code), RespOK(GetRequestID(c), code, data))
 }
 
 func AbortWithCodeErr(c *gin.Context, code int, err error) {
-	c.AbortWithStatusJSON(HTTPStatus(code), RespError(code, err))
+	c.AbortWithStatusJSON(HTTPStatus(code), RespError(GetRequestID(c), code, err))
 }
 
 func GetCommonFinisher() HandlerFunc {
