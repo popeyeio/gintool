@@ -1,5 +1,11 @@
 package gintool
 
+import (
+	"fmt"
+
+	"github.com/popeyeio/toolset"
+)
+
 type Context struct {
 	engine   *Engine
 	handlers HandlerFuncsChain
@@ -8,6 +14,15 @@ type Context struct {
 	code int
 	data interface{}
 	err  error
+}
+
+var _ fmt.Stringer = (*Context)(nil)
+
+func (c *Context) String() string {
+	if c.ok {
+		return fmt.Sprintf("code:%d, data:%s", c.code, toolset.ToString(c.data))
+	}
+	return fmt.Sprintf("code:%d, error:%v", c.code, c.err)
 }
 
 func (c *Context) Finish(code int, data interface{}) {
