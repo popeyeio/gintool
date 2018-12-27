@@ -20,7 +20,7 @@ var _ fmt.Stringer = (*Context)(nil)
 
 func (c *Context) String() string {
 	if c.ok {
-		return fmt.Sprintf("code:%d, data:%s", c.code, toolset.ToString(c.data))
+		return fmt.Sprintf("code:%d, data:%s", c.code, toolset.Stringify(c.data))
 	}
 	return fmt.Sprintf("code:%d, error:%v", c.code, c.err)
 }
