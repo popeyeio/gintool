@@ -5,14 +5,30 @@ import (
 	"sync"
 )
 
-type Kind string
+type Kind int
 
-var (
-	KindHeader   = Kind("header")
-	KindParam    = Kind("param")
-	KindQuery    = Kind("query")
-	KindPostForm = Kind("postform")
+const (
+	KindHeader Kind = iota
+	KindParam
+	KindQuery
+	KindPostForm
 )
+
+var _ fmt.Stringer = (*Kind)(nil)
+
+func (k Kind) String() string {
+	switch k {
+	case KindHeader:
+		return "header"
+	case KindParam:
+		return "param"
+	case KindQuery:
+		return "query"
+	case KindPostForm:
+		return "postform"
+	}
+	return fmt.Sprintf("unknown kind: %d", k)
+}
 
 type EmptyError struct {
 	kind Kind
@@ -44,8 +60,8 @@ func NewPostFormEmptyError(key string) *EmptyError {
 	return NewEmptyError(KindPostForm, key)
 }
 
-func (e *EmptyError) Error() string {
-	return fmt.Sprintf("%s(%s) is empty", e.key, e.kind)
+func (e EmptyError) Error() string {
+	return fmt.Sprintf("%s(%s) is empty", e.key, e.kind.String())
 }
 
 type GintoolError struct {
@@ -55,15 +71,15 @@ type GintoolError struct {
 
 var _ error = (*GintoolError)(nil)
 
-func (e *GintoolError) GetCode() int {
+func (e GintoolError) GetCode() int {
 	return e.code
 }
 
-func (e *GintoolError) GetError() error {
+func (e GintoolError) GetError() error {
 	return e.err
 }
 
-func (e *GintoolError) Error() string {
+func (e GintoolError) Error() string {
 	return fmt.Sprintf("%s - %+v", CodeMsg(e.code), e.err)
 }
 
