@@ -24,10 +24,10 @@ func HeaderBool(c *gin.Context, key string) (bool, error) {
 	}
 }
 
-func MustHeaderBool(c *gin.Context, key string, cbFuncs ...CallbackFunc) bool {
+func MustHeaderBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 	result := MustDoCallback(func() (interface{}, error) {
 		return HeaderBool(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(bool)
 }
 
@@ -39,10 +39,10 @@ func HeaderInt64(c *gin.Context, key string) (int64, error) {
 	}
 }
 
-func MustHeaderInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) int64 {
+func MustHeaderInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return HeaderInt64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(int64)
 }
 
@@ -54,10 +54,10 @@ func HeaderUint64(c *gin.Context, key string) (uint64, error) {
 	}
 }
 
-func MustHeaderUInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) uint64 {
+func MustHeaderUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return HeaderUint64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(uint64)
 }
 
@@ -69,10 +69,10 @@ func HeaderString(c *gin.Context, key string) (string, error) {
 	}
 }
 
-func MustHeaderString(c *gin.Context, key string, cbFuncs ...CallbackFunc) string {
+func MustHeaderString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 	result := MustDoCallback(func() (interface{}, error) {
 		return HeaderString(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(string)
 }
 
@@ -84,10 +84,10 @@ func ParamBool(c *gin.Context, key string) (bool, error) {
 	}
 }
 
-func MustParamBool(c *gin.Context, key string, cbFuncs ...CallbackFunc) bool {
+func MustParamBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 	result := MustDoCallback(func() (interface{}, error) {
 		return ParamBool(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(bool)
 }
 
@@ -99,10 +99,10 @@ func ParamInt64(c *gin.Context, key string) (int64, error) {
 	}
 }
 
-func MustParamInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) int64 {
+func MustParamInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return ParamInt64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(int64)
 }
 
@@ -114,10 +114,10 @@ func ParamUint64(c *gin.Context, key string) (uint64, error) {
 	}
 }
 
-func MustParamUInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) uint64 {
+func MustParamUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return ParamUint64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(uint64)
 }
 
@@ -129,10 +129,10 @@ func ParamString(c *gin.Context, key string) (string, error) {
 	}
 }
 
-func MustParamString(c *gin.Context, key string, cbFuncs ...CallbackFunc) string {
+func MustParamString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 	result := MustDoCallback(func() (interface{}, error) {
 		return ParamString(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(string)
 }
 
@@ -144,10 +144,10 @@ func QueryBool(c *gin.Context, key string) (bool, error) {
 	}
 }
 
-func MustQueryBool(c *gin.Context, key string, cbFuncs ...CallbackFunc) bool {
+func MustQueryBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 	result := MustDoCallback(func() (interface{}, error) {
 		return QueryBool(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(bool)
 }
 
@@ -159,10 +159,10 @@ func QueryInt64(c *gin.Context, key string) (int64, error) {
 	}
 }
 
-func MustQueryInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) int64 {
+func MustQueryInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return QueryInt64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(int64)
 }
 
@@ -174,10 +174,10 @@ func QueryUint64(c *gin.Context, key string) (uint64, error) {
 	}
 }
 
-func MustQueryUInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) uint64 {
+func MustQueryUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return QueryUint64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(uint64)
 }
 
@@ -189,10 +189,10 @@ func QueryString(c *gin.Context, key string) (string, error) {
 	}
 }
 
-func MustQueryString(c *gin.Context, key string, cbFuncs ...CallbackFunc) string {
+func MustQueryString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 	result := MustDoCallback(func() (interface{}, error) {
 		return QueryString(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(string)
 }
 
@@ -204,10 +204,10 @@ func PostFormBool(c *gin.Context, key string) (bool, error) {
 	}
 }
 
-func MustPostFormBool(c *gin.Context, key string, cbFuncs ...CallbackFunc) bool {
+func MustPostFormBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 	result := MustDoCallback(func() (interface{}, error) {
 		return PostFormBool(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(bool)
 }
 
@@ -219,10 +219,10 @@ func PostFormInt64(c *gin.Context, key string) (int64, error) {
 	}
 }
 
-func MustPostFormInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) int64 {
+func MustPostFormInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return PostFormInt64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(int64)
 }
 
@@ -234,10 +234,10 @@ func PostFormUint64(c *gin.Context, key string) (uint64, error) {
 	}
 }
 
-func MustPostFormUInt64(c *gin.Context, key string, cbFuncs ...CallbackFunc) uint64 {
+func MustPostFormUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 	result := MustDoCallback(func() (interface{}, error) {
 		return PostFormUint64(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(uint64)
 }
 
@@ -249,10 +249,10 @@ func PostFormString(c *gin.Context, key string) (string, error) {
 	}
 }
 
-func MustPostFormString(c *gin.Context, key string, cbFuncs ...CallbackFunc) string {
+func MustPostFormString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 	result := MustDoCallback(func() (interface{}, error) {
 		return PostFormString(c, key)
-	}, CodeBadRequest, cbFuncs...)
+	}, CodeBadRequest, cbs...)
 	return result.(string)
 }
 
@@ -265,10 +265,10 @@ func Validate(v interface{}) error {
 	return validator.GintoolValidator.ValidateStruct(v)
 }
 
-func MustValidate(v interface{}, cbFuncs ...CallbackFunc) {
+func MustValidate(v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, Validate(v)
-	}, CodeValidateErr, cbFuncs...)
+	}, CodeValidateErr, cbs...)
 }
 
 // BindHeader needs tag "header" in fields of v.
@@ -277,10 +277,10 @@ func BindHeader(c *gin.Context, v interface{}) error {
 	return binder.HeaderBinder.Bind(c, v)
 }
 
-func MustBindHeader(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustBindHeader(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, BindHeader(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 // BindParam needs tag "param" in fields of v.
@@ -288,10 +288,10 @@ func BindParam(c *gin.Context, v interface{}) error {
 	return binder.ParamBinder.Bind(c, v)
 }
 
-func MustBindParam(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustBindParam(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, BindParam(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 func JSONUseNumber(enabled bool) {
@@ -302,20 +302,20 @@ func JSONBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.JSON)
 }
 
-func MustJSONBindBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustJSONBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, JSONBindBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 func XMLBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.XML)
 }
 
-func MustXMLBindBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustXMLBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, XMLBindBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 // FormBindQuery needs tag "form" in fields of v.
@@ -324,10 +324,10 @@ func FormBindQuery(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.Query)
 }
 
-func MustFormBindQuery(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustFormBindQuery(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, FormBindQuery(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 // FormBindBody needs tag "form" in fields of v.
@@ -336,10 +336,10 @@ func FormBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.FormPost)
 }
 
-func MustFormBindBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustFormBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, FormBindBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 // FormBindQueryBody needs tag "form" in fields of v.
@@ -348,30 +348,30 @@ func FormBindQueryBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.Form)
 }
 
-func MustFormBindQueryBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustFormBindQueryBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, FormBindQueryBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 func PBBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.ProtoBuf)
 }
 
-func MustPBBindBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustPBBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, PBBindBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 func MsgpackBindBody(c *gin.Context, v interface{}) error {
 	return c.ShouldBindWith(v, binding.MsgPack)
 }
 
-func MustMsgpackBindBody(c *gin.Context, v interface{}, cbFuncs ...CallbackFunc) {
+func MustMsgpackBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, MsgpackBindBody(c, v)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
 
 // EncodeValues needs tag "url" in fields of v.
@@ -379,10 +379,10 @@ func EncodeValues(v interface{}) (url.Values, error) {
 	return query.Values(v)
 }
 
-func MustEncodeValues(v interface{}, cbFuncs ...CallbackFunc) url.Values {
+func MustEncodeValues(v interface{}, cbs ...CallbackFunc) url.Values {
 	result := MustDoCallback(func() (interface{}, error) {
 		return EncodeValues(v)
-	}, CodeEncodeErr, cbFuncs...)
+	}, CodeEncodeErr, cbs...)
 	return result.(url.Values)
 }
 
@@ -399,35 +399,35 @@ func EncodeJSON(v interface{}) (*bytes.Buffer, error) {
 
 // MustEncodeJSON needs tag "json" in fields of v.
 // Note: ReleaseBuffer needs to be called after MustEncodeJSON is called successfully.
-func MustEncodeJSON(v interface{}, cbFuncs ...CallbackFunc) *bytes.Buffer {
+func MustEncodeJSON(v interface{}, cbs ...CallbackFunc) *bytes.Buffer {
 	result := MustDoCallback(func() (interface{}, error) {
 		return EncodeJSON(v)
-	}, CodeEncodeErr, cbFuncs...)
+	}, CodeEncodeErr, cbs...)
 	return result.(*bytes.Buffer)
 }
 
-func MustDo(runFunc RunFunc, codes ...int) interface{} {
+func MustDo(run RunFunc, codes ...int) interface{} {
 	code := CodeDownstreamErr
 	if len(codes) > 0 {
 		code = codes[0]
 	}
 
-	return MustDoCallback(runFunc, code)
+	return MustDoCallback(run, code)
 }
 
-// MustDoCallback will call cbFuncs if and only if runFunc has error.
-func MustDoCallback(runFunc RunFunc, code int, cbFuncs ...CallbackFunc) interface{} {
-	if runFunc == nil {
+// MustDoCallback will call cbs if and only if run has error.
+func MustDoCallback(run RunFunc, code int, cbs ...CallbackFunc) interface{} {
+	if run == nil {
 		return nil
 	}
 
-	result, err := runFunc()
+	result, err := run()
 	if err == nil {
 		return result
 	}
 
-	for _, cbFunc := range cbFuncs {
-		cbFunc(err)
+	for _, cb := range cbs {
+		cb(err)
 	}
 
 	if !IsGintoolError(err) {
@@ -479,8 +479,8 @@ func Bind(c *gin.Context, v interface{}, flag int) (err error) {
 	return
 }
 
-func MustBind(c *gin.Context, v interface{}, flag int, cbFuncs ...CallbackFunc) {
+func MustBind(c *gin.Context, v interface{}, flag int, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, Bind(c, v, flag)
-	}, CodeBindErr, cbFuncs...)
+	}, CodeBindErr, cbs...)
 }
