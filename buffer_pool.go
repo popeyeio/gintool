@@ -8,11 +8,10 @@ import (
 var bufferPool sync.Pool
 
 func AcquireBuffer() *bytes.Buffer {
-	v := bufferPool.Get()
-	if v == nil {
-		return &bytes.Buffer{}
+	if v := bufferPool.Get(); v != nil {
+		return v.(*bytes.Buffer)
 	}
-	return v.(*bytes.Buffer)
+	return &bytes.Buffer{}
 }
 
 func ReleaseBuffer(buffer *bytes.Buffer) {

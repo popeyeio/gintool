@@ -91,11 +91,10 @@ func (e *GintoolError) reset() {
 var gintoolErrorPool sync.Pool
 
 func AcquireGintoolError(code int, err error) (e *GintoolError) {
-	v := gintoolErrorPool.Get()
-	if v == nil {
-		e = &GintoolError{}
-	} else {
+	if v := gintoolErrorPool.Get(); v != nil {
 		e = v.(*GintoolError)
+	} else {
+		e = &GintoolError{}
 	}
 
 	e.code = code

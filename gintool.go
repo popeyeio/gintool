@@ -89,11 +89,10 @@ func (e *Engine) GinHandler(handlers ...HandlerFunc) gin.HandlerFunc {
 }
 
 func (e *Engine) acquireContext() (gc *Context) {
-	v := e.contextPool.Get()
-	if v == nil {
-		gc = &Context{}
-	} else {
+	if v := e.contextPool.Get(); v != nil {
 		gc = v.(*Context)
+	} else {
+		gc = &Context{}
 	}
 
 	gc.engine = e
