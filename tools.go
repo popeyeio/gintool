@@ -2,6 +2,7 @@ package gintool
 
 import (
 	"bytes"
+	"net/http"
 	"net/url"
 	"strconv"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/popeyeio/gintool/binder"
 	"github.com/popeyeio/gintool/json"
 	"github.com/popeyeio/gintool/validator"
+	"github.com/popeyeio/handy"
 )
 
 type RunFunc func() (interface{}, error)
@@ -483,4 +485,11 @@ func MustBind(c *gin.Context, v interface{}, flag int, cbs ...CallbackFunc) {
 	MustDoCallback(func() (interface{}, error) {
 		return nil, Bind(c, v, flag)
 	}, CodeBindErr, cbs...)
+}
+
+func GetRequestHost(req *http.Request) (host string) {
+	if host = req.Host; handy.IsEmptyStr(host) {
+		host = req.URL.Host
+	}
+	return
 }
