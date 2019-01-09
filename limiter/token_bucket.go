@@ -53,7 +53,7 @@ func NewTokenLimiter(format string, burst int) (*TokenLimiter, error) {
 	}
 
 	return &TokenLimiter{
-		limiter: rate.NewLimiter(rate.Limit(limit/period.Seconds()), burst),
+		limiter: rate.NewLimiter(rate.Limit(float64(limit)/period.Seconds()), burst),
 	}, nil
 }
 
