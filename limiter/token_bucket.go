@@ -11,9 +11,8 @@ import (
 )
 
 var (
-	ErrRateFormat       = errors.New("rate format error")
-	ErrLimitNotPositive = errors.New("limit not positive")
-	ErrPeriod           = errors.New("period error")
+	ErrFormat = errors.New("limiter format error")
+	ErrPeriod = errors.New("period error")
 
 	periods = map[string]time.Duration{
 		"S": time.Second,
@@ -28,18 +27,11 @@ type TokenLimiter struct {
 
 var _ Limiter = (*TokenLimiter)(nil)
 
-func NewTokenLimiter(format string, burst int) (*TokenLimiter, error) {
+// if rate is 10 per second and burst is 20, the format is "10-S-20".
+func NewTokenLimiter(format string) (*TokenLimiter, error) {
 	tokens := strings.Split(format, handy.StrHyphen)
-	if len(tokens) != 2 {
-		return nil, ErrRateFormat
-	}
-
-	limit, err := strconv.ParseInt(tokens[0], 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	if limit <= 0 {
-		return nil, ErrLimitNotPositive
+	if len(tokens) != 3 {
+		return nil, ErrFormat
 	}
 
 	period, exists := periods[strings.ToUpper(tokens[1])]
@@ -47,8 +39,23 @@ func NewTokenLimiter(format string, burst int) (*TokenLimiter, error) {
 		return nil, ErrPeriod
 	}
 
+	burst, err := strconv.ParseInt(tokens[2], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	number, err := strconv.ParseInt(tokens[0], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	limit := rate.Inf
+	if number >= 0 {
+		limit = rate.Limit(float64(number) / period.Seconds())
+	}
+
 	return &TokenLimiter{
-		limiter: rate.NewLimiter(rate.Limit(float64(limit)/period.Seconds()), burst),
+		limiter: rate.NewLimiter(limit, int(burst)),
 	}, nil
 }
 
