@@ -6,17 +6,26 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/popeyeio/gintool"
+	"github.com/popeyeio/handy"
 )
 
 func main() {
+	r := gin.New()
+	r.RedirectTrailingSlash = false // turn off 301
+
+	r.Use(gintool.SetRequestID(GetUUID))
+
 	e := gintool.NewEngine()
 	e.Use(CheckUser)
-
-	r := gin.New()
 
 	r.POST("/records", e.GinHandler(CreateRecord))
 
 	r.Run(":1990")
+}
+
+func GetUUID(c *gin.Context) string {
+	u, _ := handy.GetUUID()
+	return u
 }
 
 func CheckUser(c *gin.Context, gc *gintool.Context) {
