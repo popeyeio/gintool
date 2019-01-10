@@ -8,7 +8,7 @@ import (
 	"gopkg.in/go-playground/validator.v8"
 )
 
-const tagKeyValidator = "valid"
+const TagKeyValidator = "valid"
 
 var GintoolValidator = &gintoolValidator{}
 
@@ -35,7 +35,7 @@ func (v *gintoolValidator) RegisterValidation(key string, fn validator.Func) err
 func (v *gintoolValidator) lazyInit() {
 	v.once.Do(func() {
 		config := &validator.Config{
-			TagName: tagKeyValidator,
+			TagName: TagKeyValidator,
 		}
 		v.validate = validator.New(config)
 	})

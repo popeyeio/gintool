@@ -6,14 +6,7 @@ import (
 	"reflect"
 	"strconv"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
-
-type Binder interface {
-	Name() string
-	Bind(*gin.Context, interface{}) error
-}
 
 func bind(ptr interface{}, values map[string][]string, tagKey string, canonical bool) error {
 	rt := reflect.TypeOf(ptr).Elem()

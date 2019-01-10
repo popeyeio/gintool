@@ -22,11 +22,6 @@ var (
 	}
 )
 
-type Limiter interface {
-	Allow() bool
-	AllowN(int) bool
-}
-
 type TokenLimiter struct {
 	limiter *rate.Limiter
 }
