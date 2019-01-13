@@ -10,6 +10,10 @@ import (
 	"golang.org/x/time/rate"
 )
 
+const (
+	FormatInf = "-1~S~1"
+)
+
 var (
 	ErrFormat = errors.New("limiter format error")
 	ErrPeriod = errors.New("period error")
