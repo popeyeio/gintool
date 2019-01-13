@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	FormatInf = "-1~S~1"
+	FormatInf  = "-1~S~1"
+	FormatZero = "0~S~1"
 )
 
 var (
