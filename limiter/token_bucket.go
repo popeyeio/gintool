@@ -27,9 +27,11 @@ type TokenLimiter struct {
 
 var _ Limiter = (*TokenLimiter)(nil)
 
-// if rate is 10 per second and burst is 20, the format is "10-S-20".
+// if rate is 10 per second and burst is 20, the format is "10~S~20".
+// if first part is 0, it will reject all events.
+// if first part is less than 0, it will allow all events.
 func NewTokenLimiter(format string) (*TokenLimiter, error) {
-	tokens := strings.Split(format, handy.StrHyphen)
+	tokens := strings.Split(format, handy.StrTilde)
 	if len(tokens) != 3 {
 		return nil, ErrFormat
 	}
