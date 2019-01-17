@@ -45,7 +45,7 @@ func CreateRecord(c *gin.Context, gc *gintool.Context) {
 	record := &Record{}
 	gintool.MustBind(c, record, gintool.BHeader|gintool.BFormBody|gintool.BValidator)
 
-	fmt.Println("deal with record")
+	fmt.Printf("record is %+v\n", record)
 
 	gc.Finish(gintool.CodeOKZero, nil)
 }

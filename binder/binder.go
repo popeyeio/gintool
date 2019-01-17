@@ -1,16 +1,16 @@
+// +build !reflect2
+
 package binder
 
 import (
-	"errors"
-	"net/textproto"
 	"reflect"
 	"strconv"
-	"time"
 )
 
-func bind(ptr interface{}, values map[string][]string, tagKey string, canonical bool) error {
-	rt := reflect.TypeOf(ptr).Elem()
-	rv := reflect.ValueOf(ptr).Elem()
+func bind(obj interface{}, values map[string][]string, tagKey string, canonical bool) error {
+	rt := reflect.TypeOf(obj).Elem()
+	rv := reflect.ValueOf(obj).Elem()
+
 	for i := 0; i < rt.NumField(); i++ {
 		rtf := rt.Field(i)
 		rvf := rv.Field(i)
@@ -34,29 +34,23 @@ func bind(ptr interface{}, values map[string][]string, tagKey string, canonical 
 			}
 		}
 
-		val, exists := values[canonicalKey(tag, canonical)]
+		vals, exists := values[canonicalKey(tag, canonical)]
 		if !exists {
 			continue
 		}
 
-		numElems := len(val)
-		if kind == reflect.Slice && numElems > 0 {
+		size := len(vals)
+		if kind == reflect.Slice && size > 0 {
 			elemKind := rvf.Type().Elem().Kind()
-			slice := reflect.MakeSlice(rvf.Type(), numElems, numElems)
-			for j := 0; j < numElems; j++ {
-				if err := setField(elemKind, val[j], slice.Index(j)); err != nil {
+			slice := reflect.MakeSlice(rvf.Type(), size, size)
+			for j := 0; j < size; j++ {
+				if err := setField(elemKind, vals[j], slice.Index(j)); err != nil {
 					return err
 				}
 			}
 			rvf.Set(slice)
-		} else {
-			if _, ok := rvf.Interface().(time.Time); ok {
-				if err := setTimeField(val[0], rtf, rvf); err != nil {
-					return err
-				}
-				continue
-			}
-			if err := setField(kind, val[0], rvf); err != nil {
+		} else if size > 0 {
+			if err := setField(kind, vals[0], rvf); err != nil {
 				return err
 			}
 		}
@@ -66,6 +60,8 @@ func bind(ptr interface{}, values map[string][]string, tagKey string, canonical 
 
 func setField(kind reflect.Kind, val string, field reflect.Value) error {
 	switch kind {
+	case reflect.Bool:
+		return setBoolField(val, field)
 	case reflect.Int:
 		return setIntField(val, 0, field)
 	case reflect.Int8:
@@ -86,8 +82,6 @@ func setField(kind reflect.Kind, val string, field reflect.Value) error {
 		return setUintField(val, 32, field)
 	case reflect.Uint64:
 		return setUintField(val, 64, field)
-	case reflect.Bool:
-		return setBoolField(val, field)
 	case reflect.Float32:
 		return setFloatField(val, 32, field)
 	case reflect.Float64:
@@ -96,85 +90,37 @@ func setField(kind reflect.Kind, val string, field reflect.Value) error {
 		field.SetString(val)
 		return nil
 	}
-	return errors.New("unknown type")
+	return ErrInvalidType
+}
+
+func setBoolField(val string, field reflect.Value) error {
+	v, err := strconv.ParseBool(convertValue(val))
+	if err == nil {
+		field.SetBool(v)
+	}
+	return err
 }
 
 func setIntField(val string, bitSize int, field reflect.Value) error {
-	if val == "" {
-		val = "0"
-	}
-
-	intVal, err := strconv.ParseInt(val, 10, bitSize)
+	v, err := strconv.ParseInt(convertValue(val), 10, bitSize)
 	if err == nil {
-		field.SetInt(intVal)
+		field.SetInt(v)
 	}
 	return err
 }
 
 func setUintField(val string, bitSize int, field reflect.Value) error {
-	if val == "" {
-		val = "0"
-	}
-
-	uintVal, err := strconv.ParseUint(val, 10, bitSize)
+	v, err := strconv.ParseUint(convertValue(val), 10, bitSize)
 	if err == nil {
-		field.SetUint(uintVal)
-	}
-	return err
-}
-
-func setBoolField(val string, field reflect.Value) error {
-	if val == "" {
-		val = "false"
-	}
-
-	boolVal, err := strconv.ParseBool(val)
-	if err == nil {
-		field.SetBool(boolVal)
+		field.SetUint(v)
 	}
 	return err
 }
 
 func setFloatField(val string, bitSize int, field reflect.Value) error {
-	if val == "" {
-		val = "0.0"
-	}
-
-	floatVal, err := strconv.ParseFloat(val, bitSize)
+	v, err := strconv.ParseFloat(convertValue(val), bitSize)
 	if err == nil {
-		field.SetFloat(floatVal)
+		field.SetFloat(v)
 	}
 	return err
-}
-
-func setTimeField(val string, structField reflect.StructField, field reflect.Value) error {
-	timeFormat := structField.Tag.Get("time_format")
-	if timeFormat == "" {
-		return errors.New("time_format not exists")
-	}
-
-	if val == "" {
-		field.Set(reflect.ValueOf(time.Time{}))
-		return nil
-	}
-
-	loc := time.Local
-	if isUTC, _ := strconv.ParseBool(structField.Tag.Get("time_utc")); isUTC {
-		loc = time.UTC
-	}
-
-	t, err := time.ParseInLocation(timeFormat, val, loc)
-	if err != nil {
-		return err
-	}
-
-	field.Set(reflect.ValueOf(t))
-	return nil
-}
-
-func canonicalKey(key string, canonical bool) string {
-	if canonical {
-		key = textproto.CanonicalMIMEHeaderKey(key)
-	}
-	return key
 }
