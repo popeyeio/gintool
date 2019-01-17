@@ -21,8 +21,10 @@ func bind(obj interface{}, values map[string][]string, tagKey string, canonical 
 	var tag string
 
 	for i := 0; i < rt.NumField(); i++ {
-		rtf, fptr = rt.Field(i), rtf.UnsafeGet(ptr)
-		typ, kind = rtf.Type(), typ.Kind()
+		rtf = rt.Field(i)
+		fptr = rtf.UnsafeGet(ptr)
+		typ = rtf.Type()
+		kind = typ.Kind()
 		tag = rtf.Tag().Get(tagKey)
 
 		switch tag {
