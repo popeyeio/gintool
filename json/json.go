@@ -4,7 +4,6 @@ package json
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 var (
@@ -14,7 +13,3 @@ var (
 	NewEncoder    = json.NewEncoder
 	NewDecoder    = json.NewDecoder
 )
-
-func init() {
-	fmt.Println("use json")
-}

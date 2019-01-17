@@ -3,8 +3,6 @@
 package json
 
 import (
-	"fmt"
-
 	"github.com/json-iterator/go"
 )
 
@@ -17,6 +15,3 @@ var (
 	NewDecoder    = json.NewDecoder
 )
 
-func init() {
-	fmt.Println("use jsoniter")
-}

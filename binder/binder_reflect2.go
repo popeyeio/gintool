@@ -7,20 +7,24 @@ import (
 	"strconv"
 	"unsafe"
 
+	"github.com/modern-go/concurrent"
 	"github.com/modern-go/reflect2"
-	"fmt"
 )
 
 func bind(obj interface{}, values map[string][]string, tagKey string, canonical bool) error {
+	rt := getTypeFromCache(obj)
 	ptr := reflect2.PtrOf(obj)
-	rt := reflect2.Type2(reflect.TypeOf(obj).Elem()).(*reflect2.UnsafeStructType)
+	var rtf reflect2.StructField
+	var fptr unsafe.Pointer
+	var typ reflect2.Type
+	var kind reflect.Kind
+	var tag string
 
 	for i := 0; i < rt.NumField(); i++ {
-		rtf := rt.Field(i)
-		fptr := rtf.UnsafeGet(ptr)
-		typ := rtf.Type()
-		kind := typ.Kind()
-		tag := rtf.Tag().Get(tagKey)
+		rtf, fptr = rt.Field(i), rtf.UnsafeGet(ptr)
+		typ, kind = rtf.Type(), typ.Kind()
+		tag = rtf.Tag().Get(tagKey)
+
 		switch tag {
 		case "-":
 			continue
@@ -202,6 +206,15 @@ func setString(val string, ptr unsafe.Pointer) {
 	*(*string)(ptr) = val
 }
 
-func init()  {
-	fmt.Println("use reflect2")
+var cache = concurrent.NewMap()
+
+func getTypeFromCache(obj interface{}) (rt *reflect2.UnsafeStructType) {
+	key := reflect2.RTypeOf(obj)
+	if val, exists := cache.Load(key); exists {
+		rt = val.(*reflect2.UnsafeStructType)
+	} else {
+		rt = reflect2.Type2(reflect.TypeOf(obj).Elem()).(*reflect2.UnsafeStructType)
+		cache.Store(key, rt)
+	}
+	return
 }
