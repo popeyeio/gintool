@@ -11,11 +11,12 @@ import (
 const (
 	memoryMax = 1 << 25
 
-	BNameHeader   = "header"
-	BNameParam    = "param"
-	BNameQuery    = "query"
-	BNameFormPost = "form-urlencoded"
-	BNameForm     = "form"
+	BNameHeader        = "header"
+	BNameParam         = "param"
+	BNameQuery         = "query"
+	BNameFormPost      = "form-urlencoded"
+	BNameForm          = "form"
+	BNameFormMultipart = "multipart/form-data"
 )
 
 var (
