@@ -12,7 +12,7 @@ import (
 )
 
 func bind(obj interface{}, values map[string][]string, tagKey string, canonical bool) error {
-	rt := getTypeFromCache(obj)
+	rt := getRTypeFromCache(obj)
 	ptr := reflect2.PtrOf(obj)
 	var rtf reflect2.StructField
 	var fptr unsafe.Pointer
@@ -210,7 +210,7 @@ func setString(val string, ptr unsafe.Pointer) {
 
 var cache = concurrent.NewMap()
 
-func getTypeFromCache(obj interface{}) (rt *reflect2.UnsafeStructType) {
+func getRTypeFromCache(obj interface{}) (rt *reflect2.UnsafeStructType) {
 	key := reflect2.RTypeOf(obj)
 	if val, exists := cache.Load(key); exists {
 		rt = val.(*reflect2.UnsafeStructType)
