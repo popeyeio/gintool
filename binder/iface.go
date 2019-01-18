@@ -5,9 +5,22 @@ import (
 	"net/textproto"
 
 	"github.com/gin-gonic/gin"
+	"github.com/popeyeio/handy"
 )
 
-var ErrInvalidType = errors.New("invalid type")
+const (
+	memoryMax = 1 << 25
+
+	BNameHeader   = "header"
+	BNameParam    = "param"
+	BNameQuery    = "query"
+	BNameFormPost = "form-urlencoded"
+	BNameForm     = "form"
+)
+
+var (
+	ErrInvalidType = errors.New("invalid type")
+)
 
 type Binder interface {
 	Name() string
@@ -22,7 +35,7 @@ func canonicalKey(key string, canonical bool) string {
 }
 
 func convertValue(value string) string {
-	if value != "" {
+	if !handy.IsEmptyStr(value) {
 		return value
 	}
 	return "0"

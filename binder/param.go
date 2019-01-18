@@ -6,8 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const TagKeyParam = "param"
-
 var ParamBinder = &paramBinder{}
 
 type paramBinder struct {
@@ -16,11 +14,11 @@ type paramBinder struct {
 var _ Binder = (*paramBinder)(nil)
 
 func (paramBinder) Name() string {
-	return TagKeyParam
+	return BNameParam
 }
 
 func (paramBinder) Bind(c *gin.Context, obj interface{}) error {
-	return bind(obj, parse(c.Params), TagKeyParam, false)
+	return bind(obj, parse(c.Params), BNameParam, false)
 }
 
 func parse(ps gin.Params) (v url.Values) {

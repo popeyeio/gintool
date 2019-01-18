@@ -19,7 +19,7 @@ type RunFunc func() (interface{}, error)
 type CallbackFunc func(error)
 
 func HeaderBool(c *gin.Context, key string) (bool, error) {
-	if v := c.GetHeader(key); v == "" {
+	if v := c.GetHeader(key); handy.IsEmptyStr(v) {
 		return false, NewHeaderEmptyError(key)
 	} else {
 		return strconv.ParseBool(v)
@@ -34,7 +34,7 @@ func MustHeaderBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 }
 
 func HeaderInt64(c *gin.Context, key string) (int64, error) {
-	if v := c.GetHeader(key); v == "" {
+	if v := c.GetHeader(key); handy.IsEmptyStr(v) {
 		return 0, NewHeaderEmptyError(key)
 	} else {
 		return strconv.ParseInt(v, 10, 64)
@@ -49,7 +49,7 @@ func MustHeaderInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 }
 
 func HeaderUint64(c *gin.Context, key string) (uint64, error) {
-	if v := c.GetHeader(key); v == "" {
+	if v := c.GetHeader(key); handy.IsEmptyStr(v) {
 		return 0, NewHeaderEmptyError(key)
 	} else {
 		return strconv.ParseUint(v, 10, 64)
@@ -64,8 +64,8 @@ func MustHeaderUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 }
 
 func HeaderString(c *gin.Context, key string) (string, error) {
-	if v := c.GetHeader(key); v == "" {
-		return "", NewHeaderEmptyError(key)
+	if v := c.GetHeader(key); handy.IsEmptyStr(v) {
+		return handy.StrEmpty, NewHeaderEmptyError(key)
 	} else {
 		return v, nil
 	}
@@ -79,7 +79,7 @@ func MustHeaderString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 }
 
 func ParamBool(c *gin.Context, key string) (bool, error) {
-	if v := c.Param(key); v == "" {
+	if v := c.Param(key); handy.IsEmptyStr(v) {
 		return false, NewParamEmptyError(key)
 	} else {
 		return strconv.ParseBool(v)
@@ -94,7 +94,7 @@ func MustParamBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 }
 
 func ParamInt64(c *gin.Context, key string) (int64, error) {
-	if v := c.Param(key); v == "" {
+	if v := c.Param(key); handy.IsEmptyStr(v) {
 		return 0, NewParamEmptyError(key)
 	} else {
 		return strconv.ParseInt(v, 10, 64)
@@ -109,7 +109,7 @@ func MustParamInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 }
 
 func ParamUint64(c *gin.Context, key string) (uint64, error) {
-	if v := c.Param(key); v == "" {
+	if v := c.Param(key); handy.IsEmptyStr(v) {
 		return 0, NewParamEmptyError(key)
 	} else {
 		return strconv.ParseUint(v, 10, 64)
@@ -124,8 +124,8 @@ func MustParamUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 }
 
 func ParamString(c *gin.Context, key string) (string, error) {
-	if v := c.Param(key); v == "" {
-		return "", NewParamEmptyError(key)
+	if v := c.Param(key); handy.IsEmptyStr(v) {
+		return handy.StrEmpty, NewParamEmptyError(key)
 	} else {
 		return v, nil
 	}
@@ -139,7 +139,7 @@ func MustParamString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 }
 
 func QueryBool(c *gin.Context, key string) (bool, error) {
-	if v := c.Query(key); v == "" {
+	if v := c.Query(key); handy.IsEmptyStr(v) {
 		return false, NewQueryEmptyError(key)
 	} else {
 		return strconv.ParseBool(v)
@@ -154,7 +154,7 @@ func MustQueryBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 }
 
 func QueryInt64(c *gin.Context, key string) (int64, error) {
-	if v := c.Query(key); v == "" {
+	if v := c.Query(key); handy.IsEmptyStr(v) {
 		return 0, NewQueryEmptyError(key)
 	} else {
 		return strconv.ParseInt(v, 10, 64)
@@ -169,7 +169,7 @@ func MustQueryInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 }
 
 func QueryUint64(c *gin.Context, key string) (uint64, error) {
-	if v := c.Query(key); v == "" {
+	if v := c.Query(key); handy.IsEmptyStr(v) {
 		return 0, NewQueryEmptyError(key)
 	} else {
 		return strconv.ParseUint(v, 10, 64)
@@ -184,8 +184,8 @@ func MustQueryUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 {
 }
 
 func QueryString(c *gin.Context, key string) (string, error) {
-	if v := c.Query(key); v == "" {
-		return "", NewQueryEmptyError(key)
+	if v := c.Query(key); handy.IsEmptyStr(v) {
+		return handy.StrEmpty, NewQueryEmptyError(key)
 	} else {
 		return v, nil
 	}
@@ -199,7 +199,7 @@ func MustQueryString(c *gin.Context, key string, cbs ...CallbackFunc) string {
 }
 
 func PostFormBool(c *gin.Context, key string) (bool, error) {
-	if v := c.PostForm(key); v == "" {
+	if v := c.PostForm(key); handy.IsEmptyStr(v) {
 		return false, NewPostFormEmptyError(key)
 	} else {
 		return strconv.ParseBool(v)
@@ -214,7 +214,7 @@ func MustPostFormBool(c *gin.Context, key string, cbs ...CallbackFunc) bool {
 }
 
 func PostFormInt64(c *gin.Context, key string) (int64, error) {
-	if v := c.PostForm(key); v == "" {
+	if v := c.PostForm(key); handy.IsEmptyStr(v) {
 		return 0, NewPostFormEmptyError(key)
 	} else {
 		return strconv.ParseInt(v, 10, 64)
@@ -229,7 +229,7 @@ func MustPostFormInt64(c *gin.Context, key string, cbs ...CallbackFunc) int64 {
 }
 
 func PostFormUint64(c *gin.Context, key string) (uint64, error) {
-	if v := c.PostForm(key); v == "" {
+	if v := c.PostForm(key); handy.IsEmptyStr(v) {
 		return 0, NewPostFormEmptyError(key)
 	} else {
 		return strconv.ParseUint(v, 10, 64)
@@ -244,8 +244,8 @@ func MustPostFormUInt64(c *gin.Context, key string, cbs ...CallbackFunc) uint64 
 }
 
 func PostFormString(c *gin.Context, key string) (string, error) {
-	if v := c.PostForm(key); v == "" {
-		return "", NewPostFormEmptyError(key)
+	if v := c.PostForm(key); handy.IsEmptyStr(v) {
+		return handy.StrEmpty, NewPostFormEmptyError(key)
 	} else {
 		return v, nil
 	}
@@ -321,9 +321,8 @@ func MustXMLBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 }
 
 // FormBindQuery needs tag "form" in fields of v.
-// NOTE: form does not support "-".
 func FormBindQuery(c *gin.Context, v interface{}) error {
-	return c.ShouldBindWith(v, binding.Query)
+	return binder.QueryBinder.Bind(c, v)
 }
 
 func MustFormBindQuery(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
@@ -333,9 +332,8 @@ func MustFormBindQuery(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 }
 
 // FormBindBody needs tag "form" in fields of v.
-// NOTE: form does not support "-".
 func FormBindBody(c *gin.Context, v interface{}) error {
-	return c.ShouldBindWith(v, binding.FormPost)
+	return binder.FormPostBinder.Bind(c, v)
 }
 
 func MustFormBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
@@ -345,9 +343,8 @@ func MustFormBindBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {
 }
 
 // FormBindQueryBody needs tag "form" in fields of v.
-// NOTE: form does not support "-".
 func FormBindQueryBody(c *gin.Context, v interface{}) error {
-	return c.ShouldBindWith(v, binding.Form)
+	return binder.FormBinder.Bind(c, v)
 }
 
 func MustFormBindQueryBody(c *gin.Context, v interface{}, cbs ...CallbackFunc) {

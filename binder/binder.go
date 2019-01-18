@@ -5,6 +5,8 @@ package binder
 import (
 	"reflect"
 	"strconv"
+
+	"github.com/popeyeio/handy"
 )
 
 func bind(obj interface{}, values map[string][]string, tagKey string, canonical bool) error {
@@ -21,9 +23,9 @@ func bind(obj interface{}, values map[string][]string, tagKey string, canonical 
 		kind := rvf.Kind()
 		tag := rtf.Tag.Get(tagKey)
 		switch tag {
-		case "-":
+		case handy.StrHyphen:
 			continue
-		case "":
+		case handy.StrEmpty:
 			tag = rtf.Name
 
 			if kind == reflect.Struct {
