@@ -15,18 +15,13 @@ import (
 func bind(obj interface{}, values map[string][]string, tagKey string, canonical bool) error {
 	rt := getRTypeFromCache(obj)
 	ptr := reflect2.PtrOf(obj)
-	var rtf reflect2.StructField
-	var fptr unsafe.Pointer
-	var typ reflect2.Type
-	var kind reflect.Kind
-	var tag string
 
 	for i := 0; i < rt.NumField(); i++ {
-		rtf = rt.Field(i)
-		fptr = rtf.UnsafeGet(ptr)
-		typ = rtf.Type()
-		kind = typ.Kind()
-		tag = rtf.Tag().Get(tagKey)
+		rtf := rt.Field(i)
+		fptr := rtf.UnsafeGet(ptr)
+		typ := rtf.Type()
+		kind := typ.Kind()
+		tag := rtf.Tag().Get(tagKey)
 
 		switch tag {
 		case handy.StrHyphen:
